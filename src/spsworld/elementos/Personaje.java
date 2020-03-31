@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import spsworld.juegobase.elementos.Sprite;
+import spsworld.multicast.elements.Jugador;
 
 /**
  *
@@ -22,11 +23,45 @@ public class Personaje extends Sprite{
     
     protected int paso = 10;
     
-    public Personaje(int x, int y, int alto, int ancho, Color color) {
+    private Jugador jugador;
+    private String nombre;
+    private String id;
+    
+    private Mundo mundo;
+    
+    public Personaje(int x, int y, int alto, int ancho, Color color, Mundo m) {
         super(x, y, ancho, alto, color);
         
         //setColor();
+        this.jugador = new Jugador(this);
+        this.mundo = m;
     }
+
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
     
     public boolean mover(int direccion)
     {
@@ -34,19 +69,19 @@ public class Personaje extends Sprite{
         int ny = y;
         switch(direccion)
         {
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
                 ny -= paso;
             break;
 
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
                 ny += paso;
             break;
 
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 nx -= paso;
             break;
 
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 nx += paso;
             break;
         }
@@ -59,10 +94,26 @@ public class Personaje extends Sprite{
             if(contenedor != null)
                 contenedor.refrescar();
             
+            this.jugador.enviarMovimiento(x, y, ancho, alto);
             return true;
         }
         
         return false;
+    }
+    
+    public void enviarMensaje(String mensaje){
+        this.jugador.enviarChat(this.id+"::"+this.nombre+"::"+mensaje);
+    }
+    
+    public void enviarInicio(){
+        
+        String temp = this.id+"::"+this.nombre;
+        this.jugador.enviarInicio(temp);
+        
+    }
+    
+    public void recibirMensaje(String mensaje){
+        this.mundo.interpretar(mensaje);
     }
 
     public void crecerPersonaje()
