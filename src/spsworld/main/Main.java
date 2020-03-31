@@ -8,6 +8,7 @@ package spsworld.main;
 import java.awt.Color;
 import static java.awt.SystemColor.window;
 import spsworld.elementos.Mundo;
+import spsworld.views.Inicio;
 import spsworld.views.MundoView;
 
 /**
@@ -19,12 +20,15 @@ public class Main {
         Mundo mundo = new Mundo(0, 0, 500, 500, Color.RED);
         
         MundoView mundoView = new MundoView();
-        mundoView.setMundo(mundo);
-        mundo.setContenedorGrafico(mundoView);
-        mundoView.setSize(500, 500);
-        mundoView.setTitle("MUNDO SPS");
+  
+        mundoView.iniciarMundo(mundo,0,0,500,500);
+        mundo.setContenedorGrafico(mundoView.getPanel());
+        mundoView.setSize(800, 640);
+        //mundoView.setTitle("MUNDO SPS");
         mundoView.setLocationRelativeTo(null);
-        mundoView.setVisible(true);
+        //mundoView.setVisible(true);
+        Inicio inicio = new Inicio(mundoView, true, mundoView);
+        inicio.setVisible(true);
     }
     
 }
